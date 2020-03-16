@@ -3,8 +3,8 @@ import xlrd
 import numpy as np
   
 # Give the location of the file
-loc = ('C:\\Users\\Vladimir\\Desktop\\FD\\reference_data.xlsx')
-loc2 = ('C:\\Users\\Vladimir\\Desktop\\FD\\m_f_moment.xlsx')
+loc = ('C:\\Users\\Vladimir\\Documents\\GitHub\\SVV_FD_B34\\reference_data.xlsx')
+loc2 = ('C:\\Users\\Vladimir\\Documents\\GitHub\\SVV_FD_B34\\m_f_moment.xlsx')
   
 # To open Workbook 
 wb = xlrd.open_workbook(loc)
@@ -55,16 +55,15 @@ for i in range(74,76):
 cg = np.array(cg).reshape(2,13)
 
 
-mass = m
+mass = np.array(m)/0.453592             #lbs
 fu = np.concatenate(([0],st_fused, elev_fused, cg[:,-2]))    #lbs
 ti = np.concatenate(([0],st_time, elev_time, cg[:,1]))       #days
 
 fuel_used = []
 time = []
 for i in range(len(ti)):
-    fuel_used.append(float(fu[i])*0.453592)     #kg
-    time.append(float(ti[i])*24*3600)           #sec
-
+    fuel_used.append(float(fu[i]))     #lbs
+    time.append(float(ti[i])*24*60)           #min
 
 
 
@@ -88,8 +87,8 @@ for rows in range(n_r2):
 m_f = []
 M = []
 for i in range(50):
-    m_f.append((grid2[i][0]))
-    M.append(grid2[i][1])
+    m_f.append((grid2[i][0]))  #lbs
+    M.append(grid2[i][1]*100)      #lbs
 
 
 
