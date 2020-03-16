@@ -94,7 +94,7 @@ CD = CD0 + (CLa * alpha0) ** 2 / (pi * A * e) # Drag coefficient [ ]
 # Stabiblity derivatives
 #------------------------------------------------------------------------------
 CX0    = W * np.sin(th0) / (0.5 * rho * V0 ** 2 * S)
-CXu    = -0.02792
+CXu    = -0.09500
 CXa    = +0.47966		# Positive! (has been erroneously negative since 1993) 
 CXadot = +0.08330
 CXq    = -0.28170
@@ -236,7 +236,7 @@ sys_a = crtl.ss(Aa, Ba, Ca, Da)
 
 # Plotting the outputs
 #------------------------------------------------------------------------------
-t = np.arange(0, 5000, 0.1)
+t = np.arange(0, 50000, 1)
 t, y1 = crtl.impulse_response(sys_s, t)
 t, y2 = crtl.impulse_response(sys_a, t)
 
