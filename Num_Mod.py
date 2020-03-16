@@ -176,9 +176,13 @@ C3s[:,0] = c311, c321, c331, c341
 # get the ss matrices
 As = np.dot(np.linalg.inv(C1s), -C2s)
 Bs = np.dot(np.linalg.inv(C1s), -C3s)
-Cs = np.matrix([[0, 1, 0, 0],
-                [0, 0, 1, 0]]) # only output alpha and theta
+Cs = np.matrix([[V0, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, V0/c]]) # output u, alpha, theta and q
 Ds = np.matrix([[0],
+                [0],
+                [0],
                 [0]]) # elevator deflection is not an output
 
 sys_s = crtl.ss(As, Bs, Cs, Ds) # symmetric model
@@ -227,8 +231,12 @@ C3a[3,:] = c641, c642
 Aa = np.dot(np.linalg.inv(C1a), -C2a)
 Ba = np.dot(np.linalg.inv(C1a), -C3a)
 Ca = np.matrix([[1, 0, 0, 0],
-                [0, 1, 0, 0]]) # roll and bank angle as output
+                [0, 1, 0, 0],
+                [0, 0, 2*V0/b, 0],
+                [0, 0, 0, 2*V0/b]]) # slip and bank angles and rates as output
 Da = np.matrix([[0, 0],
+                [0, 0],
+                [0, 0],
                 [0, 0]]) # deflections are no outputs
 
 sys_a = crtl.ss(Aa, Ba, Ca, Da)
@@ -236,17 +244,27 @@ sys_a = crtl.ss(Aa, Ba, Ca, Da)
 
 # Plotting the outputs
 #------------------------------------------------------------------------------
-t = np.arange(0, 50000, 1)
+t = np.arange(0, 500, 0.01)
 t, y1 = crtl.impulse_response(sys_s, t)
 t, y2 = crtl.impulse_response(sys_a, t)
 
-plt.subplot(211)
-plt.plot(t, 180 * y1[0] / pi, label="angle of attack [deg]")
-plt.plot(t, 180 * y1[1] / pi, label="pitch angle [deg]")
+plt.subplot(221)
+plt.plot(t, 180 * y1[1] / pi, label="angle of attack [deg]")
+plt.plot(t, 180 * y1[2] / pi, label="pitch angle [deg]")
 plt.legend(), plt.show()
 
-plt.subplot(212)
+plt.subplot(222)
+plt.plot(t, y1[0], label="deviation from nominal airspeed [m/s]")
+plt.plot(t, 180 * y1[3] / pi, label="pitch rate [deg/s]")
+plt.legend(), plt.show()
+
+plt.subplot(223)
 plt.plot(t, 180 * y2[0] / pi, label="sideslip angle [deg]")
 plt.plot(t, 180 * y2[1] / pi, label="bank angle [deg]")
 plt.legend(), plt.show()
+
+plt.subplot(224)
+plt.plot(t, 180 * y2[2] / pi, label="roll rate [deg/s]")
+plt.plot(t, 180 * y2[3] / pi, label="yaw rate [deg/s]")
+plt.legend(), plt.plot()
 #==============================================================================
