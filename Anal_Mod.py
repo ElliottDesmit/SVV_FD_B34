@@ -5,41 +5,42 @@ Created on Sat Mar 21 21:03:39 2020
 @author: Elliott Desmit
 """
 
-# Citation 550 - Analytical Model
+# Citation 550 - Linear simulation
 #==============================================================================
 #==============================================================================
 
 # Imports
 #------------------------------------------------------------------------------
 import numpy as np
+import control as crtl
 import matplotlib.pyplot as plt
 pi = np.pi
 #==============================================================================
 
 # Stationary flight condition
 #------------------------------------------------------------------------------
-hp0    = 4000 	       # pressure altitude in the stationary flight condition [m]
-V0     = 150           # true airspeed in the stationary flight condition [m/sec]
-alpha0 = 2 / 180 * pi  # angle of attack in the stationary flight condition [rad]
-th0    = 5 / 180 * pi  # pitch angle in the stationary flight condition [rad]
+hp0    = 2743.2          # pressure altitude in the stationary flight condition [m]
+V0     = 127.3823        # true airspeed in the stationary flight condition [m/sec]
+alpha0 = 1.4 / 180 * pi  # angle of attack in the stationary flight condition [rad]
+th0    = alpha0          # pitch angle in the stationary flight condition [rad]
 #==============================================================================
 
 # Aircraft mass
 #------------------------------------------------------------------------------
-m      = 6000        # mass [kg]
+m      = 5993.442768     # mass [kg]
 #==============================================================================
 
 # Aerodynamic properties
 #------------------------------------------------------------------------------
-e      = 0.8         # Oswald factor [ ]
-CD0    = 0.04        # Zero lift drag coefficient [ ]
-CLa    = 5.084       # Slope of CL-alpha curve [ ]
+e      = 0.8434      # Oswald factor [ ]
+CD0    = 0.02147     # Zero lift drag coefficient [ ]
+CLa    = 4.4327      # Slope of CL-alpha curve [rad^-1]
 #==============================================================================
 
 # Longitudinal stability
 #------------------------------------------------------------------------------
-Cma    = -0.5626     # longitudinal stabilty [ ]
-Cmde   = -1.1642     # elevator effectiveness [ ]
+Cma    = -0.66132    # longitudinal stabilty [ ]
+Cmde   = -1.62299    # elevator effectiveness [ ]
 #==============================================================================
 
 # Aircraft geometry
@@ -100,7 +101,7 @@ CD = CD0 + (CLa * alpha0) ** 2 / (pi * A * e) # Drag coefficient [ ]
 # Stabiblity derivatives
 #------------------------------------------------------------------------------
 CX0    = W * np.sin(th0) / (0.5 * rho * V0 ** 2 * S)
-CXu    = -0.09500
+CXu    = -0.095
 CXa    = +0.47966		# Positive! (has been erroneously negative since 1993) 
 CXadot = +0.08330
 CXq    = -0.28170
@@ -138,32 +139,34 @@ Cnda   =  -0.0120
 Cndr   =  -0.0939
 #==============================================================================
 
-## Characteristic Equation Full Model (probz a mistake, ignore)
-##------------------------------------------------------------------------------
+# Characteristic Equation Full Model (no idealisations)
+#------------------------------------------------------------------------------
+
+## Symmetric EOM
+#A = 4 * (muc**2) * KY2 * (CZadot - 2*muc)
 #
-#A = 8 * muc ** 3 * KY2
+#b1 = 2 * muc * (Cmadot * (CZq + 2*muc) - Cmq * (CZadot - 2*muc))
+#b2 = 2 * muc * (-KY2 * (CXu * (CZadot - 2*muc) - 2*muc*CZa))
+#B = b1 + b2
 #
-#b1 = CXu*CZa - 2*muc*CXu - 2*muc*CZa - 2*muc*CZadot
-#b2 = 2*muc*Cmq + CZq*Cmadot + 2*muc*Cma - Cmadot*CXu + 2*muc*Cma
-#B = 2 * muc * (KY2 * (b1) - (b2))
+#c1 = 2 * muc * Cma * (CZq + 2*muc) - Cmadot * (2*muc*CX0 + CXu*(CZq + 2*muc))
+#c2 = Cmq * (CXu * (CZadot - 2*muc) - 2*muc*CZa)
+#c3 = 2 * muc * KY2 * (CXa*CZu - CZa*CXu)
+#C = c1 + c2 + c3
 #
-#c1 = CXu*CZa - CXa*CZu
-#c2 = CX0*Cmadot + CXu*Cmq + CZa*Cmq + CZadot*Cmq - CXq*Cmu - CZq*Cma + Cma*CXu
-#c3 = -CXu*CZadot*Cmq - CZu*Cmadot*CXq + CXq*CZadot*Cmu + CZq*Cmadot*CXu
-#C = 2 * muc * (KY2 * (c1) + c2) + c3
+#d1 = Cmu * (CXa * (CZq + 2*muc) - CZ0 * (CZadot - 2*muc))
+#d2 = -Cma * (2*muc*CX0 + CXu * (CZq + 2*muc))
+#d3 = Cmadot * (CX0*CXu - CZ0*CZu) + Cmq * (CXu*CZa - CZu*CXa)
+#D = d1 + d2 + d3
 #
-#d1 = CX0*Cma - CZ0*Cmu - CXa*Cmu
-#d2 = CZ0*CZa*Cmu - CZu*Cmadot*CZ0 - CX0*Cmadot*CXu - CXu*CZa*Cmq - CZu*Cma*CXq
-#d2 += -CXa*CZq*Cmu + CXq*CZa*Cmu + CXa*CZu*Cmq + CZq*Cma*CXu
-#D = 2 * muc * d1 + d2
-#
-#E = CXa*CX0*Cmu + CZ0*CZa*Cmu - CZu*Cma*CZ0 - CX0*Cma*CXu
+#E = -Cmu * (CX0*CXa + CZ0*CZa) + Cma * (CX0*CXu + CZ0*CZu)
 #
 ## get the eigenvalues 
-#l1, l2, l3, l4 = np.roots([A,B,C,D,E]) 
-#print(l1, l2, l3, l4)
-#print()
-##==============================================================================
+#l1sp, l2sp, l1ph, l2ph = np.roots([A,B,C,D,E]) 
+#---
+
+# Asymmetric EOM
+#==============================================================================
 
 # Characteristic Equation Short Period 
 #------------------------------------------------------------------------------
@@ -175,11 +178,11 @@ B = - 2 * muc * KY2 * CZa - (2 * muc + CZq) * Cmadot - (2 * muc - CZadot) * Cmq
 C = CZa * Cmq - (2 * muc + CZq) * Cma
 
 # get the eigenvalues
-l1, l2 = np.roots([A,B,C])
+l1sp, l2sp = np.roots([A,B,C])
 print("Short Period Eigenvalues")
 print("Real_____||Complex")
-print(round(l1.real,6),"",round(l1.imag,6))
-print(round(l2.real,6), round(l2.imag,6))
+print(round(l1sp.real,6),"",round(l1sp.imag,6))
+print(round(l2sp.real,6), round(l2sp.imag,6))
 print()
 #==============================================================================
 
@@ -193,11 +196,11 @@ B = 2 * muc * (CXu*Cma - Cmu*CXa) + Cmq * (CZu*CXa - CXu*CZa)
 C = CZ0 * (Cmu*CZa - CZu*Cma)
 
 # get the eigenvalues
-l1, l2 = np.roots([A,B,C])
+l1ph, l2ph = np.roots([A,B,C])
 print("Phugoid Period Eigenvalues")
 print("Real_____||Complex")
-print(round(l1.real,6),"",round(l1.imag,6))
-print(round(l2.real,6), round(l2.imag,6))
+print(round(l1ph.real,6),"",round(l1ph.imag,6))
+print(round(l2ph.real,6), round(l2ph.imag,6))
 print()
 #==============================================================================
 
@@ -205,10 +208,10 @@ print()
 #------------------------------------------------------------------------------
 
 # get the eigenvalues
-l1 = Clp / (4 * mub * KX2)
+lar = Clp / (4 * mub * KX2)
 print("Aperiodic Roll Eigenvalue")
 print("Real_____||Complex")
-print(round(l1.real,6),"",round(l1.imag,6))
+print(round(lar.real,6),"",round(lar.imag,6))
 print()
 #==============================================================================
 
@@ -222,11 +225,11 @@ B = 2 * mub * (-2 * KZ2 * CYb - Cnr)
 C = 4 * mub * Cnb + CYb*Cnr
 
 # get the eigenvalues
-l1, l2 = np.roots([A,B,C])
+l1dr, l2dr = np.roots([A,B,C])
 print("Dutch Roll Eigenvalues")
 print("Real_____||Complex")
-print(round(l1.real,6),"",round(l1.imag,6))
-print(round(l2.real,6), round(l2.imag,6))
+print(round(l1dr.real,6),"",round(l1dr.imag,6))
+print(round(l2dr.real,6), round(l2dr.imag,6))
 print()
 #==============================================================================
 
@@ -234,13 +237,12 @@ print()
 #------------------------------------------------------------------------------
 
 # get the eigenvalues
-l1 = 2 * CL * (Clb*Cnr - Cnb*Clr) / (Clp * (CYb*Cnr + 4*mub*Cnb) - Cnp * (CYb*Clr + 4*mub*Clb))
+lsm = 2 * CL * (Clb*Cnr - Cnb*Clr) / (Clp * (CYb*Cnr + 4*mub*Cnb) - Cnp * (CYb*Clr + 4*mub*Clb))
 print("Spiral Motion Eigenvalue")
 print("Real_____||Complex")
-print(round(l1.real,6),"",round(l1.imag,6))
+print(round(lsm.real,6),"",round(lsm.imag,6))
 print()
 #==============================================================================
-
 
 
 

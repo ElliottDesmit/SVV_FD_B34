@@ -25,15 +25,15 @@ m      = 5993.442768     # mass [kg]
 
 # Aerodynamic properties
 #------------------------------------------------------------------------------
-e      = 0.8088      # Oswald factor [ ]
-CD0    = 0.0227      # Zero lift drag coefficient [ ]
+e      = 0.8434      # Oswald factor [ ]
+CD0    = 0.02147     # Zero lift drag coefficient [ ]
 CLa    = 4.4327      # Slope of CL-alpha curve [rad^-1]
 #==============================================================================
 
 # Longitudinal stability
 #------------------------------------------------------------------------------
-Cma    = -0.5626     # longitudinal stabilty [ ]
-Cmde   = -1.872753   # elevator effectiveness [ ]
+Cma    = -0.66132    # longitudinal stabilty [ ]
+Cmde   = -1.62299    # elevator effectiveness [ ]
 #==============================================================================
 
 # Aircraft geometry
@@ -94,7 +94,7 @@ CD = CD0 + (CLa * alpha0) ** 2 / (pi * A * e) # Drag coefficient [ ]
 # Stabiblity derivatives
 #------------------------------------------------------------------------------
 CX0    = W * np.sin(th0) / (0.5 * rho * V0 ** 2 * S)
-CXu    = -0.09500
+CXu    = -0.095
 CXa    = +0.47966		# Positive! (has been erroneously negative since 1993) 
 CXadot = +0.08330
 CXq    = -0.28170
@@ -142,21 +142,23 @@ C1s = np.zeros((4,4)) # matrix for xdot vector
 c111, c112, c113, c114 = -2*muc, 0, 0, 0
 c121, c122, c123, c124 = 0, CZadot - 2*muc, 0, 0
 c131, c132, c133, c134 = 0, 0, -1, 0
-c141, c142, c143, c144 = 0, Cmadot, 0, -2*muc*KY2
+c141, c142, c143, c144 = 0, Cmadot, 0, -2*muc*KY2*(c/V0)
 
 C1s[0,:] = c111, c112, c113, c114
 C1s[1,:] = c121, c122, c123, c124
 C1s[2,:] = c131, c132, c133, c134
 C1s[3,:] = c141, c142, c143, c144
+
+C1s = (c/V0) * C1s
 #--
 
 C2s = np.zeros((4,4)) # matrix for x vector
 
 # again store the entries for C2s
-c211, c212, c213, c214 = CXu, CXa, CZ0, CXq
-c221, c222, c223, c224 = CZu, CZa, -CX0, CZq + 2*muc
-c231, c232, c233, c234 = 0, 0, 0, 1
-c241, c242, c243, c244 = Cmu, Cma, 0, Cmq
+c211, c212, c213, c214 = CXu, CXa, CZ0, CXq*(c/V0)
+c221, c222, c223, c224 = CZu, CZa, -CX0, (CZq + 2*muc)*(c/V0)
+c231, c232, c233, c234 = 0, 0, 0, 1*(c/V0)
+c241, c242, c243, c244 = Cmu, Cma, 0, Cmq*(c/V0)
 
 C2s[0,:] = c211, c212, c213, c214
 C2s[1,:] = c221, c222, c223, c224
@@ -176,10 +178,10 @@ C3s[:,0] = c311, c321, c331, c341
 # get the ss matrices
 As = np.dot(np.linalg.inv(C1s), -C2s)
 Bs = np.dot(np.linalg.inv(C1s), -C3s)
-Cs = np.matrix([[V0, 0, 0, 0],
+Cs = np.matrix([[1, 0, 0, 0],
                 [0, 1, 0, 0],
                 [0, 0, 1, 0],
-                [0, 0, 0, V0/c]]) # output u, alpha, theta and q
+                [0, 0, 0, 1]]) # output u, alpha, theta and q
 Ds = np.matrix([[0],
                 [0],
                 [0],
@@ -196,21 +198,23 @@ C1a = np.zeros((4,4)) # matrix for xdot vector
 
 c411, c412, c413, c414 = CYbdot - 2*mub, 0, 0, 0
 c421, c422, c423, c424 = 0, -1/2, 0, 0
-c431, c432, c433, c434 = 0, 0, -4*mub*KX2, 4*mub*KXZ
-C441, c442, c443, c444 = Cnbdot, 0, 4*mub*KXZ, -4*mub*KZ2
+c431, c432, c433, c434 = 0, 0, -4*mub*KX2*(b/(2*V0)), 4*mub*KXZ*(b/(2*V0))
+C441, c442, c443, c444 = Cnbdot, 0, 4*mub*KXZ*(b/(2*V0)), -4*mub*KZ2*(b/(2*V0))
 
 C1a[0,:] = c411, c412, c413, c414
 C1a[1,:] = c421, c422, c423, c424
 C1a[2,:] = c431, c432, c433, c434
 C1a[3,:] = C441, c442, c443, c444
+
+C1a = (b/V0) * C1a
 #--
 
 C2a = np.zeros((4,4)) # matrix for x vector
 
-c511, c512, c513, c514 = CYb, CL, CYp, CYr - 4*mub
-c521, c522, c523, c524 = 0, 0, 1, 0
-c531, c532, c533, c534 = Clb, 0, Clp, Clr
-c541, c542, c543, c544 = Cnb, 0, Cnp, Cnr
+c511, c512, c513, c514 = CYb, CL, CYp*(b/(2*V0)), (CYr - 4*mub)*(b/(2*V0))
+c521, c522, c523, c524 = 0, 0, 1*(b/(2*V0)), 0
+c531, c532, c533, c534 = Clb, 0, Clp*(b/(2*V0)), Clr*(b/(2*V0))
+c541, c542, c543, c544 = Cnb, 0, Cnp*(b/(2*V0)), Cnr*(b/(2*V0))
 
 C2a[0,:] = c511, c512, c513, c514
 C2a[1,:] = c521, c522, c523, c524
@@ -235,8 +239,8 @@ Aa = np.dot(np.linalg.inv(C1a), -C2a)
 Ba = np.dot(np.linalg.inv(C1a), -C3a)
 Ca = np.matrix([[1, 0, 0, 0],
                 [0, 1, 0, 0],
-                [0, 0, 2*V0/b, 0],
-                [0, 0, 0, 2*V0/b]]) # slip and bank angles and rates as output
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]]) # slip and bank angles and rates as output
 Da = np.matrix([[0, 0],
                 [0, 0],
                 [0, 0],
@@ -250,29 +254,28 @@ l1a, l2a, l3a, l4a = np.linalg.eigvals(Aa)
 
 # Plotting the outputs
 #------------------------------------------------------------------------------
-t = np.arange(0, 10000, 0.1)
-t, y1 = crtl.impulse_response(sys_s, t)
-t, y2 = crtl.impulse_response(sys_a, t)
-
-plt.subplot(221)
-plt.plot(t, 180 * y1[1] / pi, label="angle of attack [deg]")
-plt.plot(t, 180 * y1[2] / pi, label="pitch angle [deg]")
-plt.legend(), plt.show()
-
-plt.subplot(222)
-plt.plot(t, y1[0], label="deviation from nominal airspeed [m/s]")
-plt.plot(t, 180 * y1[3] / pi, label="pitch rate [deg/s]")
-plt.legend(), plt.show()
-
-plt.subplot(223)
-plt.plot(t, 180 * y2[0] / pi, label="sideslip angle [deg]")
-plt.plot(t, 180 * y2[1] / pi, label="bank angle [deg]")
-plt.legend(), plt.show()
-
-plt.subplot(224)
-plt.plot(t, 180 * y2[2] / pi, label="roll rate [deg/s]")
-plt.plot(t, 180 * y2[3] / pi, label="yaw rate [deg/s]")
-plt.legend(), plt.plot()
+#t = np.arange(0, 1000, 0.1)
+#t, y1 = crtl.impulse_response(sys_s, t)
+#t, y2 = crtl.impulse_response(sys_a, t)
+#
+#plt.subplot(221)
+#plt.plot(t, 180 * y1[1] / pi, label="angle of attack [deg]")
+#plt.plot(t, 180 * y1[2] / pi, label="pitch angle [deg]")
+#plt.legend(), plt.show()
+#
+#plt.subplot(222)
+#plt.plot(t, y1[0], label="deviation from nominal airspeed [m/s]")
+#plt.plot(t, 180 * y1[3] / pi, label="pitch rate [deg/s]")
+#plt.legend(), plt.show()
+#
+#plt.subplot(223)
+#plt.plot(t, 180 * y2[0] / pi, label="sideslip angle [deg]")
+#plt.plot(t, 180 * y2[1] / pi, label="bank angle [deg]")
+#plt.legend(), plt.show()
+#
+#plt.subplot(224)
+#plt.plot(t, 180 * y2[2] / pi, label="roll rate [deg/s]")
+#plt.plot(t, 180 * y2[3] / pi, label="yaw rate [deg/s]")
+#plt.legend(), plt.plot()
 #==============================================================================
-
 

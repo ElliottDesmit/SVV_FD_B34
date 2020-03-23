@@ -5,8 +5,18 @@ Created on Sun Mar 22 13:43:17 2020
 @author: ellio
 """
 
-from Num_Mod import l1s, l2s, l3s, l4s, l1a, l2a, l3a, l4a # numerical eigvals
+from Num_Mod import c, b, V0, l1s, l2s, l3s, l4s, l1a, l2a, l3a, l4a # numerical eigvals
 from Anal_Mod import l1sp, l2sp, l1ph, l2ph, lar, l1dr, l2dr, lsm # analytical eigenvalues
+
+# make the numerical eigenvalues dimensionless
+l1s *= c/V0
+l2s *= c/V0
+l3s *= c/V0
+l4s *= c/V0
+l1a *= b/V0
+l2a *= b/V0
+l3a *= b/V0
+l4a *= b/V0
 
 def err(l1num, l1an) :
     e = 100 * abs((l1num - l1an) / l1an)
