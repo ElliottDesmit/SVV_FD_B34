@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 x_ax = 48
 
 y_ax = 17 # choose desired measurements
-y_ax2 = 42
+y_ax2 = 27
 
 
 aper_roll = [2695,2775,'Aperiodic Roll','A'] 
