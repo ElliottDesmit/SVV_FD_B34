@@ -2,23 +2,29 @@ from numpy import *
 from Flight_Data import DATA
 from matplotlib import pyplot as plt
 
+
+# USER INPUT
 x_ax = 48
 
-y_ax = 44 # choose desired measurements
-y_ax2 = 45
+y_ax = 17 # choose desired measurements
+y_ax2 = 42
 
-aper_roll = [2690,2770,'Aperiodic Roll'] 
-short_period = [2750,2830,'Short Period Motion']
-dutch_roll = [2845,2875,'Dutch Roll']
-dutch_roll_yd = [2915,2935, 'Dutch Roll YD']
-phugoid = [2900,3250,'Phugoid']#when does phugoid motion end?
-spiral = [3230,3370,'Spiral']#when does spiral motion end?
+
+aper_roll = [2695,2775,'Aperiodic Roll','A'] 
+short_period = [2755,2850,'Short Period Motion','S']
+dutch_roll = [2850,2900,'Dutch Roll','A']
+dutch_roll_yd = [2910,2970, 'Dutch Roll YD','A']
+phugoid = [2970,3180,'Phugoid','S']
+spiral = [3250,3350,'Spiral','A']
 zero_g = [3500,3550,'Zero G']
 full = [9,4564,'full flight']
 
-custom = [650,2650,'custom timeframe']
+custom = [2650,3600,'custom timeframe']
 
-motion = custom # choose motion
+motion = phugoid # choose motion
+
+
+# PROGRAM PLOTS
 
 i_0 = where(DATA[2:,48].astype(float) == motion[0])
 i_end = where(DATA[2:,48].astype(float) == motion[1])
