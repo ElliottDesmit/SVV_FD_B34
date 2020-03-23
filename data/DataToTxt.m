@@ -52,7 +52,5 @@ U = [data.vane_AOA.units, data.elevator_dte.units, data.column_fe.units,...
 
 DATA = [string(D); string(U); T];
 
-file = fopen('data.txt','wt');
-fprintf('data.txt',T);
-fclose(file);
+writematrix(DATA,'data.txt');
 
