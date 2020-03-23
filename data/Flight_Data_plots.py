@@ -2,17 +2,27 @@ from numpy import *
 from Flight_Data import DATA
 from matplotlib import pyplot as plt
 
-x_ax = 48 # time
+x_ax = 48 
 
 y_ax = 17 # choose desired measurements
-y_ax2 = 2
+y_ax2 = 22
 
-t_start = 3500 # time measurements start at 9.0 sec
-t_stop = 4500 #time measurements end at 4564.0 sec
+aper_roll = [arange(2690,2770.1,0.1),'Aperiodic Roll']
+short_period = [arange(2750,2830.1,0.1),'Short Period Motion']
+dutch_roll = [arange(2810,2890.1,0.1),'Dutch Roll']
+dutch_roll_yd = [arange(2870,2950.1,0.1), 'Dutch Roll YD']
+phugoid = [arange(2930,3250.1,0.1),'Phugoid']#when does phugoid motion end?
+spiral = [arange(3230,3360.1,0.1),'Spiral']#when does spiral motion end?
 
-i_0 = where(DATA[2:,48].astype(float)==t_start)
-i_end = where(DATA[2:,48].astype(float)==t_stop)
-dom = arange(int(i_0[0])+2,int(i_end[0])+3,1) # create desired domain
+motion = phugoid # choose motion
+
+##t_start = 2690 # time measurements start at 9.0 sec
+##t_stop = 2770 #time measurements end at 4564.0 sec
+##
+##i_0 = where(DATA[2:,48].astype(float)==t_start)
+##i_end = where(DATA[2:,48].astype(float)==t_stop)
+##dom = arange(int(i_0[0])+2,int(i_end[0])+3,1) # create desired domain
+dom = (motion[0]*10).astype(int)
 
 col1 ='r' # color for y axis 1
 col2 ='b' # color for y axis 2
@@ -30,11 +40,11 @@ ax2.plot(DATA[dom,x_ax].astype(float),DATA[dom,y_ax2].astype(float),color=col2)
 ax2.set_ylabel(DATA[0,y_ax2]+' ['+DATA[1,y_ax2]+']',color=col2)
 ax2.tick_params(axis='y', labelcolor=col2)
 
+plt.title(DATA[0,y_ax]+' & '+DATA[0,y_ax2]+' vs. '+DATA[0,x_ax]+'\nfor '+motion[1])
+
 fig.tight_layout()
 
 plt.show()
-
-
 
 """ DATA[:,i] with i :
 
