@@ -44,7 +44,7 @@ input_spiral = np.vstack((input_spiral_a,input_spiral_r))
 #1 Short period
 
 b , e = list(t).index(2768) , list(t).index(2828)
-sys_s ,_,_,_= num_mod(height[b],V_0[b],m_t[b])
+sys_s ,_,_,_= num_mod(height[b],V_0[b],m_t[b],alpha_val[b])
 t1, sim_s1, x1 = ctrl.forced_response(sys_s, t_shortperiod,input_short)
 
 plt.subplot(221)
@@ -70,7 +70,7 @@ plt.show()
 
 #2 Phugoid
 b , e = list(t).index(2948) , list(t).index(3248)
-sys_s ,_,_,_= num_mod(height[b],V_0[b],m_t[b])
+sys_s ,_,_,_= num_mod(height[b],V_0[b],m_t[b],alpha_val[b])
 t1, sim_s1, x2 = ctrl.forced_response(sys_s, t_phugoid, input_phugoid)
 
 plt.subplot(221)
@@ -91,13 +91,12 @@ plt.plot(t1,sim_s1[3] * 180 / np.pi,label="pitch rate")
 plt.plot(t1,q_val[b:e]-np.ones(len(t1))*q_val[b:e][0],label="Data")
 plt.legend()
 
-
 plt.show()
 
 #Asymmetric
 #1 Aperiodic
 b , e = list(t).index(2708) , list(t).index(2768)
-_ ,sys_a,_,_= num_mod(height[b],V_0[b],m_t[b])
+_ ,sys_a,_,_= num_mod(height[b],V_0[b],m_t[b],alpha_val[b])
 t1, sim_s1, x2 = ctrl.forced_response(sys_a, t_aperiodic, input_ap)
 
 plt.subplot(221)
@@ -119,7 +118,7 @@ plt.show()
 
 #2 dutch
 b , e = list(t).index(2828),list(t).index(2888)
-_ ,sys_a,_,_= num_mod(height[b],V_0[b],m_t[b])
+_ ,sys_a,_,_= num_mod(height[b],V_0[b],m_t[b],alpha_val[b])
 t1, sim_s1, x2 = ctrl.forced_response(sys_a, t_dutch, input_dutch)
 
 plt.subplot(221)
@@ -141,7 +140,7 @@ plt.show()
 
 #3 yaw
 b , e = list(t).index(2888),list(t).index(2948)
-_ ,sys_a,_,_= num_mod(height[b],V_0[b],m_t[b])
+_ ,sys_a,_,_= num_mod(height[b],V_0[b],m_t[b],alpha_val[b])
 t1, sim_s1, x2 = ctrl.forced_response(sys_a, t_yaw, input_yaw)
 
 plt.subplot(221)
@@ -163,7 +162,7 @@ plt.show()
 
 #4 spiral
 b , e = list(t).index(3248),list(t).index(3548)
-_ ,sys_a,_,_= num_mod(height[b],V_0[b],m_t[b])
+_ ,sys_a,_,_= num_mod(height[b],V_0[b],m_t[b],alpha_val[b])
 t1, sim_s1, x2 = ctrl.forced_response(sys_a, t_spiral, input_spiral)
 
 plt.subplot(221)

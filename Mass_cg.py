@@ -57,7 +57,7 @@ def mass_funct(c, mass,time,fuel_used,DATA):      # sec
     plt.ylabel("Aircraft mass [kg]")
     #plt.plot(t_DATA,M_t_DATA)
     plt.title("Aircraft mass in function of time" + str(r_2))
-    plt.show()
+    #plt.show()
 
     return M_t_DATA, FU(t), t, FU_DATA, t_DATA,time
 

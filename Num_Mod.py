@@ -11,13 +11,13 @@ import matplotlib.pyplot as plt
 pi = np.pi
 #==============================================================================
 
-def num_mod(h , V , m):
+def num_mod(h , V , m , alpha):
 
     # Stationary flight condition
     #------------------------------------------------------------------------------
     hp0    =  h #2743.2          # pressure altitude in the stationary flight condition [m]
     V0     = V  #127.3823        # true airspeed in the stationary flight condition [m/sec]
-    alpha0 = 1.4 / 180 * pi  # angle of attack in the stationary flight condition [rad]
+    alpha0 = alpha / 180 * pi  # 1.4 angle of attack in the stationary flight condition [rad]
     th0    = alpha0          # pitch angle in the stationary flight condition [rad]
     #==============================================================================
 
