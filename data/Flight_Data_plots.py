@@ -4,16 +4,17 @@ from matplotlib import pyplot as plt
 
 x_ax = 48 
 
-y_ax = 28 # choose desired measurements
-y_ax2 = 18
+y_ax = 26 # choose desired measurements
+y_ax2 = 16
 
 aper_roll = [arange(2690,2770.1,0.1),'Aperiodic Roll']
 short_period = [arange(2750,2830.1,0.1),'Short Period Motion']
 dutch_roll = [arange(2810,2890.1,0.1),'Dutch Roll']
 dutch_roll_yd = [arange(2870,2950.1,0.1), 'Dutch Roll YD']
-phugoid = [arange(2930,3010.1,0.1),'Phugoid']
+phugoid = [arange(2930,3010.1,0.1),'Phugoid']#when does phugoid motion end?
+spiral = [arange(3230,3360.1,0.1),'Spiral']#when does spiral motion end?
 
-motion = phugoid # choose motion
+motion = spiral # choose motion
 
 ##t_start = 2690 # time measurements start at 9.0 sec
 ##t_stop = 2770 #time measurements end at 4564.0 sec
