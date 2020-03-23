@@ -3,7 +3,7 @@ import xlrd
 import numpy as np
   
 # Give the location of the file
-loc = ('C:\\Users\\Vladimir\\Documents\\GitHub\\SVV_FD_B34\\reference_data.xlsx')
+loc = ('C:\\Users\\Vladimir\\Documents\\GitHub\\SVV_FD_B34\\reference_data.xlsx')   #reference_data.xlsx')
 loc2 = ('C:\\Users\\Vladimir\\Documents\\GitHub\\SVV_FD_B34\\m_f_moment.xlsx')
   
 # To open Workbook 

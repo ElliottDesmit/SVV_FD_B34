@@ -19,7 +19,7 @@ CG = [cg_loc_crew, cg_loc_bag,cg_loc_bem,cg_new]
 
 # constants
 BEM = 9165  # lbs
-block_f = 2676   # #lbs
+block_f = 4050   # #lbs2676
 Bag = 220   # lbs
 c = [BEM,block_f,Bag]
 
@@ -67,8 +67,8 @@ def cg_funct(c, mass, time, fuel_used,CG,DATA):
     _, FU , t,_ , _,time = mass_funct(c, mass, time, fuel_used,DATA)
 
 
-    num_noch = np.ones(len(FU))*(sum(np.array(mass) * np.array(CG[0])) +  c[0] * CG[2] + c[2]*330) +  np.interp(np.ones(len(FU))*c[1] - FU, m_f,M) # bag included:
-    den_noch = np.ones(len(FU))*(sum(np.array(mass)) + c[0]  +  c[1] +c[2]) - FU
+    num_noch = np.ones(len(fuel_used))*(sum(np.array(mass) * np.array(CG[0])) +  c[0] * CG[2] + c[2]*330) +  np.interp(np.ones(len(fuel_used))*c[1] - fuel_used, m_f,M) # bag included:
+    den_noch = np.ones(len(fuel_used))*(sum(np.array(mass)) + c[0]  +  c[1] +c[2]) - fuel_used
 
     cg_loc_noch = num_noch / den_noch
 
@@ -77,7 +77,7 @@ def cg_funct(c, mass, time, fuel_used,CG,DATA):
 
     cg_loc = num / den
 
-    num = np.ones(len(fuel_used)) * (c[0] * CG[2] + c[2] * 330) + np.interp(np.ones(len(fuel_used)) * c[1] - fuel_used, m_f,M) + np.concatenate((sum(np.array(mass) * np.array(CG[0])) * np.ones(len(time[:-3])), sum(np.array(mass) * np.array(CG[3])) * np.ones(3)))
+    num = np.ones(len(fuel_used)) * (c[0] * CG[2] + c[2] * 330) + np.interp(np.ones(len(fuel_used)) * c[1] - fuel_used, m_f,M) + np.concatenate((sum(np.array(mass) * np.array(CG[0])) * np.ones(len(time[:-2])), sum(np.array(mass) * np.array(CG[3])) * np.ones(2)))
     den = np.ones(len(fuel_used)) * (sum(np.array(mass)) + c[0] + c[1] + c[2]) - fuel_used
 
     cg_loc_real = num / den
@@ -90,7 +90,7 @@ def cg_funct(c, mass, time, fuel_used,CG,DATA):
     plt.grid()
     plt.show()
 
-    return cg_loc_noch[0],cg_loc[0]
+    return cg_loc_noch[-3:]-cg_loc_real[-3:]
 
 print(cg_funct(c,mass,time,fuel_used,CG,DATA))
 
