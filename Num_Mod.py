@@ -12,10 +12,10 @@ pi = np.pi
 
 # Stationary flight condition
 #------------------------------------------------------------------------------
-hp0    = 4000 	       # pressure altitude in the stationary flight condition [m]
-V0     = 150           # true airspeed in the stationary flight condition [m/sec]
-alpha0 = 2 / 180 * pi  # angle of attack in the stationary flight condition [rad]
-th0    = 5 / 180 * pi  # pitch angle in the stationary flight condition [rad]
+hp0    = 2743.2          # pressure altitude in the stationary flight condition [m]
+V0     = 127.3823        # true airspeed in the stationary flight condition [m/sec]
+alpha0 = 1.4 / 180 * pi  # angle of attack in the stationary flight condition [rad]
+th0    = alpha0          # pitch angle in the stationary flight condition [rad]
 #==============================================================================
 
 # Aircraft mass
@@ -25,15 +25,15 @@ m      = 6000        # mass [kg]
 
 # Aerodynamic properties
 #------------------------------------------------------------------------------
-e      = 0.8         # Oswald factor [ ]
-CD0    = 0.04        # Zero lift drag coefficient [ ]
-CLa    = 5.084       # Slope of CL-alpha curve [ ]
+e      = 0.8088      # Oswald factor [ ]
+CD0    = 0.0227      # Zero lift drag coefficient [ ]
+CLa    = 4.4327      # Slope of CL-alpha curve [rad^-1]
 #==============================================================================
 
 # Longitudinal stability
 #------------------------------------------------------------------------------
 Cma    = -0.5626     # longitudinal stabilty [ ]
-Cmde   = -1.1642     # elevator effectiveness [ ]
+Cmde   = -1.872753   # elevator effectiveness [ ]
 #==============================================================================
 
 # Aircraft geometry
@@ -186,6 +186,9 @@ Ds = np.matrix([[0],
                 [0]]) # elevator deflection is not an output
 
 sys_s = crtl.ss(As, Bs, Cs, Ds) # symmetric model
+
+# get the eigenvalues
+l1s, l2s, l3s, l4s = np.linalg.eigvals(As)
 #--
 
 # Asymmetric flight
@@ -240,11 +243,14 @@ Da = np.matrix([[0, 0],
                 [0, 0]]) # deflections are no outputs
 
 sys_a = crtl.ss(Aa, Ba, Ca, Da)
+
+# get the eigenvalues
+l1a, l2a, l3a, l4a = np.linalg.eigvals(Aa)
 #==============================================================================
 
 # Plotting the outputs
 #------------------------------------------------------------------------------
-t = np.arange(0, 500, 0.01)
+t = np.arange(0, 10000, 0.1)
 t, y1 = crtl.impulse_response(sys_s, t)
 t, y2 = crtl.impulse_response(sys_a, t)
 
@@ -268,3 +274,5 @@ plt.plot(t, 180 * y2[2] / pi, label="roll rate [deg/s]")
 plt.plot(t, 180 * y2[3] / pi, label="yaw rate [deg/s]")
 plt.legend(), plt.plot()
 #==============================================================================
+
+
