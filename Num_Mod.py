@@ -20,7 +20,7 @@ th0    = alpha0          # pitch angle in the stationary flight condition [rad]
 
 # Aircraft mass
 #------------------------------------------------------------------------------
-m      = 6000        # mass [kg]
+m      = 5993.442768     # mass [kg]
 #==============================================================================
 
 # Aerodynamic properties
