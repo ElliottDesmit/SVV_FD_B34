@@ -8,9 +8,13 @@ Created on Mon Mar 23 12:43:14 2020
 # imports
 from Fligth_Data import DATA
 import control as ctrl
-from Num_Mod import alpha0, th0, sys_s, sys_a,V0
+from Num_Mod import num_mod
 import numpy as np
+from Mass_cg import M_t_DATA
 import matplotlib.pyplot as plt
+
+alpha0 = 1.4 / 180 * np.pi
+th0 = alpha0
 
 # function to fix the mess
 def fixit(arr) :
@@ -30,7 +34,7 @@ alpha_val = fixit(DATA[2:,0]) - (180 * alpha0 / np.pi) # AoA experimental [deg]
 theta_val = fixit(DATA[2:,22]) - (180 * th0 / np.pi) # th experimental [deg]
 q_val = fixit(DATA[2:,27]) # q experimental [deg/s]
 
-t, sim_s, x = ctrl.forced_response(sys_s, t, delta_e) # u, AoA, th, q simulated
+
 
 # asymm
 delta_a = np.pi * fixit(DATA[2:,16]) / 180 # aileron input [rad]
@@ -42,39 +46,46 @@ phi_val = fixit(DATA[2:,21]) # `roll angle experimental [deg]
 p_val = fixit(DATA[2:,26]) # roll rate experimental [deg/s]
 r_val = fixit(DATA[2:,28]) # yaw rate experimental [deg/s]
 
-t, sim_a, x = ctrl.forced_response(sys_a, t, delta_in)
 
-# Symmetric Parameters
-#------------------------------------------------------------------------------
+#num mod values
 
-#plotting u vs time
-plt.subplot(221)
-plt.plot(t, sim_s[0], label="Simulated Data")
-plt.plot(t, u_val, label="Flight Data")
-plt.xlabel("Flight Time [s]")
-plt.ylabel("Speed Deviation [m/s]")
+height = fixit(DATA[2:,37])
+V_0 = fixit(DATA[2:,42])
+m_t = M_t_DATA
 
-# plotting alpha vs time
-plt.subplot(222)
-plt.plot(t, (180 * sim_s[1] / np.pi), label="Simulation Data")
-plt.plot(t, alpha_val, label="Flight Data")
-plt.xlabel("Flight Time [s]")
-plt.ylabel("Angle of Attack [deg]")
-
-# plotting theta vs time
-plt.subplot(223)
-plt.plot(t, (180 * sim_s[2] / np.pi), label="Simulation Data")
-plt.plot(t, theta_val, label="Flight Data")
-plt.xlabel("Flight Time [s]")
-plt.ylabel("Pitch Angle [deg]")
-
-# plotting q vs time
-plt.subplot(224)
-plt.plot(t, (180 * sim_s[3] / np.pi), label="Simulated Data")
-plt.plot(t, q_val, label="Flight Data")
-plt.xlabel("Flight Time [s]")
-plt.ylabel("Pitch Rate [deg/s]")
-plt.legend(), plt.show()
+# t, sim_a, x = ctrl.forced_response(sys_a, t, delta_in)
+#t, sim_s, x = ctrl.forced_response(sys_s, t, delta_e) # u, AoA, th, q simulated
+# # Symmetric Parameters
+# #------------------------------------------------------------------------------
+#
+# #plotting u vs time
+# plt.subplot(221)
+# plt.plot(t, sim_s[0], label="Simulated Data")
+# plt.plot(t, u_val, label="Flight Data")
+# plt.xlabel("Flight Time [s]")
+# plt.ylabel("Speed Deviation [m/s]")
+#
+# # plotting alpha vs time
+# plt.subplot(222)
+# plt.plot(t, (180 * sim_s[1] / np.pi), label="Simulation Data")
+# plt.plot(t, alpha_val, label="Flight Data")
+# plt.xlabel("Flight Time [s]")
+# plt.ylabel("Angle of Attack [deg]")
+#
+# # plotting theta vs time
+# plt.subplot(223)
+# plt.plot(t, (180 * sim_s[2] / np.pi), label="Simulation Data")
+# plt.plot(t, theta_val, label="Flight Data")
+# plt.xlabel("Flight Time [s]")
+# plt.ylabel("Pitch Angle [deg]")
+#
+# # plotting q vs time
+# plt.subplot(224)
+# plt.plot(t, (180 * sim_s[3] / np.pi), label="Simulated Data")
+# plt.plot(t, q_val, label="Flight Data")
+# plt.xlabel("Flight Time [s]")
+# plt.ylabel("Pitch Rate [deg/s]")
+# plt.legend(), plt.show()
 #==============================================================================
 
 # Asymmetric Parameters

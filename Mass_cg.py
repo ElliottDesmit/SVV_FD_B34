@@ -59,7 +59,9 @@ def mass_funct(c, mass,time,fuel_used,DATA):      # sec
     plt.title("Aircraft mass in function of time" + str(r_2))
     plt.show()
 
-    return M_beg, FU(t), t, FU_DATA, t_DATA,time
+    return M_t_DATA, FU(t), t, FU_DATA, t_DATA,time
+
+M_t_DATA, x,x,x,x,x = mass_funct(c,mass,time,fuel_used,DATA)
 
 
 def cg_funct(c, mass, time, fuel_used,CG,DATA):
@@ -92,7 +94,7 @@ def cg_funct(c, mass, time, fuel_used,CG,DATA):
 
     return cg_loc_noch[-3:]-cg_loc_real[-3:]
 
-print(cg_funct(c,mass,time,fuel_used,CG,DATA))
+# print(cg_funct(c,mass,time,fuel_used,CG,DATA))
 
 
 

@@ -3,7 +3,8 @@
 import control as ctrl
 import numpy as np
 import matplotlib.pyplot as plt
-from Valid_ED import u_val, alpha_val, theta_val, q_val, delta_a, delta_r, delta_in, delta_e,phi_val, p_val, r_val, t, alpha0, th0, sys_s, sys_a
+from Num_Mod import num_mod
+from Valid_ED import u_val, alpha_val, theta_val, q_val, delta_a, delta_r, delta_in, delta_e,phi_val, p_val, r_val, t, height,V_0,m_t
 
 
 
@@ -41,8 +42,11 @@ input_spiral = np.vstack((input_spiral_a,input_spiral_r))
 # Symmetric
 
 #1 Short period
-t1, sim_s1, x1 = ctrl.forced_response(sys_s, t_shortperiod,input_short)
+
 b , e = list(t).index(2768) , list(t).index(2828)
+sys_s ,_,_,_= num_mod(height[b],V_0[b],m_t[b])
+t1, sim_s1, x1 = ctrl.forced_response(sys_s, t_shortperiod,input_short)
+
 plt.subplot(221)
 plt.plot(t1,sim_s1[0],label="Deviation from nom speed")
 plt.plot(t1,u_val[b:e]-np.ones(len(t1))*u_val[b:e][0],label="Data")
@@ -65,8 +69,10 @@ plt.show()
 
 
 #2 Phugoid
-t1, sim_s1, x2 = ctrl.forced_response(sys_s, t_phugoid, input_phugoid)
 b , e = list(t).index(2948) , list(t).index(3248)
+sys_s ,_,_,_= num_mod(height[b],V_0[b],m_t[b])
+t1, sim_s1, x2 = ctrl.forced_response(sys_s, t_phugoid, input_phugoid)
+
 plt.subplot(221)
 plt.plot(t1,sim_s1[0],label="Deviation from nom speed")
 plt.plot(t1,u_val[b:e]-np.ones(len(t1))*u_val[b:e][0],label="Data")
@@ -90,9 +96,9 @@ plt.show()
 
 #Asymmetric
 #1 Aperiodic
-t1, sim_s1, x2 = ctrl.forced_response(sys_a, t_aperiodic, input_ap)
 b , e = list(t).index(2708) , list(t).index(2768)
-
+_ ,sys_a,_,_= num_mod(height[b],V_0[b],m_t[b])
+t1, sim_s1, x2 = ctrl.forced_response(sys_a, t_aperiodic, input_ap)
 
 plt.subplot(221)
 plt.plot(t1,sim_s1[1] * 180 / np.pi,label="phi")
@@ -112,9 +118,9 @@ plt.legend()
 plt.show()
 
 #2 dutch
-t1, sim_s1, x2 = ctrl.forced_response(sys_a, t_dutch, input_dutch)
 b , e = list(t).index(2828),list(t).index(2888)
-
+_ ,sys_a,_,_= num_mod(height[b],V_0[b],m_t[b])
+t1, sim_s1, x2 = ctrl.forced_response(sys_a, t_dutch, input_dutch)
 
 plt.subplot(221)
 plt.plot(t1,sim_s1[1] * 180 / np.pi,label="phi")
@@ -134,9 +140,9 @@ plt.legend()
 plt.show()
 
 #3 yaw
-t1, sim_s1, x2 = ctrl.forced_response(sys_a, t_yaw, input_yaw)
 b , e = list(t).index(2888),list(t).index(2948)
-
+_ ,sys_a,_,_= num_mod(height[b],V_0[b],m_t[b])
+t1, sim_s1, x2 = ctrl.forced_response(sys_a, t_yaw, input_yaw)
 
 plt.subplot(221)
 plt.plot(t1,sim_s1[1] * 180 / np.pi,label="phi")
@@ -156,9 +162,9 @@ plt.legend()
 plt.show()
 
 #4 spiral
-t1, sim_s1, x2 = ctrl.forced_response(sys_a, t_spiral, input_spiral)
 b , e = list(t).index(3248),list(t).index(3548)
-
+_ ,sys_a,_,_= num_mod(height[b],V_0[b],m_t[b])
+t1, sim_s1, x2 = ctrl.forced_response(sys_a, t_spiral, input_spiral)
 
 plt.subplot(221)
 plt.plot(t1,sim_s1[1] * 180 / np.pi,label="phi")
