@@ -6,8 +6,10 @@ from matplotlib import pyplot as plt
 # USER INPUT
 x_ax = 48
 
-y_ax = 17 # choose desired measurements
-y_ax2 = 27
+y_ax = 37 # choose desired measurements
+y_ax2 = 46
+y_ax3 = 17
+y_ax4 = 27
 
 
 aper_roll = [2695,2775,'Aperiodic Roll','A'] 
@@ -21,8 +23,12 @@ full = [9,4564,'full flight']
 
 custom = [2650,3600,'custom timeframe']
 
-motion = phugoid # choose motion
+eigen_mot = where(DATA[2:,46] != '0.0')
 
+motion = custom # choose motion
+
+
+#=======================================================================================
 
 # PROGRAM PLOTS
 
@@ -34,8 +40,9 @@ dom = arange(int(i_0[0])+2,int(i_end[0])+3,1) # create desired domain
 col1 ='r' # color for y axis 1
 col2 ='b' # color for y axis 2
 
-fig, ax1 = plt.subplots()
+fig, (ax1,ax3) = plt.subplots(2,1,sharex=True)
 
+#subplot 1
 ax1.plot(DATA[dom,x_ax].astype(float),DATA[dom,y_ax].astype(float),color=col1)
 ax1.set_xlabel(DATA[0,x_ax]+' ['+DATA[1,x_ax]+']')
 ax1.set_ylabel(DATA[0,y_ax]+' ['+DATA[1,y_ax]+']',color=col1)
@@ -48,6 +55,20 @@ ax2.set_ylabel(DATA[0,y_ax2]+' ['+DATA[1,y_ax2]+']',color=col2)
 ax2.tick_params(axis='y', labelcolor=col2)
 
 plt.title(DATA[0,y_ax]+' & '+DATA[0,y_ax2]+' over '+DATA[0,x_ax]+'\nfor '+motion[2])
+
+#subplot 2
+ax3.plot(DATA[dom,x_ax].astype(float),DATA[dom,y_ax3].astype(float),color=col1)
+ax3.set_xlabel(DATA[0,x_ax]+' ['+DATA[1,x_ax]+']')
+ax3.set_ylabel(DATA[0,y_ax3]+' ['+DATA[1,y_ax3]+']',color=col1)
+ax3.tick_params(axis='y', labelcolor=col1)
+
+ax4 = ax3.twinx()
+
+ax4.plot(DATA[dom,x_ax].astype(float),DATA[dom,y_ax4].astype(float),color=col2)
+ax4.set_ylabel(DATA[0,y_ax4]+' ['+DATA[1,y_ax4]+']',color=col2)
+ax4.tick_params(axis='y', labelcolor=col2)
+
+plt.title(DATA[0,y_ax3]+' & '+DATA[0,y_ax4]+' over '+DATA[0,x_ax]+'\nfor '+motion[2])
 
 fig.tight_layout()
 
