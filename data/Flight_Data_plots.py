@@ -1,6 +1,7 @@
 from numpy import *
 from Flight_Data import DATA
 from matplotlib import pyplot as plt
+from Num_Mod import Ba
 
 #=======================================================================================
 
@@ -45,12 +46,14 @@ indexes = dom[exact_domain]
 
 if motion[3] == 'A':
 
+    # create state vector  (always bèta, phi, etc? or make state whichever meas. are chosen?)
     bèta = DATA[indexes,49].astype(float)
     phi = DATA[indexes,21].astype(float)
     p = DATA[indexes,26].astype(float)
     r = DATA[indexes,28].astype(float)
     x = array([bèta,phi,p,r])
 
+    # input vector (for assymetrical motion)
     d_e = DATA[indexes,16].astype(float)
     d_r = DATA[indexes,18].astype(float)
     u = array([d_e,d_r])
@@ -61,7 +64,9 @@ if motion[3] == 'A':
         x_dot = vstack((x_dot,xdot))
     x_dot = x_dot.T    
     
-        
+    Ax = mat(x_dot)-mat(Ba)*mat(u)
+    A = Ax/mat(x)
+    
 dom = indexes
 
 #=======================================================================================
