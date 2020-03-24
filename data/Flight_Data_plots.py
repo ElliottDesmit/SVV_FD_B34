@@ -25,10 +25,10 @@ dutch_roll = [2850,2900,'Dutch Roll','A']
 dutch_roll_yd = [2910,2970, 'Dutch Roll YD','A']
 phugoid = [2970,3180,'Phugoid','S']
 spiral = [3250,3350,'Spiral','A']
-zero_g = [3500,3550,'Zero G']
-full = [9,4564,'full flight']
+zero_g = [3500,3550,'Zero G','']
+full = [9,4564,'full flight','']
 
-custom = [2650,3600,'custom timeframe'] 
+custom = [2650,3600,'custom timeframe',''] 
 
 #eigen_mot = where(DATA[2:,46] != '0.0')
 
@@ -38,16 +38,20 @@ motion = dutch_roll # choose motion
 
 # DERIVE PARAMETERS/EIGENVALUES FROM DATA
 
+i_0 = where(DATA[2:,48].astype(float) == motion[0])
+i_end = where(DATA[2:,48].astype(float) == motion[1])
+dom = arange(int(i_0[0])+2,int(i_end[0])+3,1) # create desired domain
 
+exact_domain = where(DATA[dom,46] != '0.0')
+indexes = dom[exact_domain]
+
+if motion[3] == 'A':
+   
 
 
 #=======================================================================================
 
 # PROGRAM PLOTS
-
-i_0 = where(DATA[2:,48].astype(float) == motion[0])
-i_end = where(DATA[2:,48].astype(float) == motion[1])
-dom = arange(int(i_0[0])+2,int(i_end[0])+3,1) # create desired domain
 
 
 col1 ='r' # color for y axis 1
