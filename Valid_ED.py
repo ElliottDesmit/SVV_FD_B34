@@ -8,12 +8,12 @@ Created on Mon Mar 23 12:43:14 2020
 # imports
 from Fligth_Data import DATA
 import control as ctrl
-from Num_Mod import num_mod
 import numpy as np
 from Mass_cg import M_t_DATA
 import matplotlib.pyplot as plt
 
-
+alpha0 = 1.4 / 180 * np.pi
+th0 = alpha0
 
 # function to fix the mess
 def fixit(arr) :
@@ -29,8 +29,8 @@ t = fixit(DATA[2:,48]) # time array
 delta_e = np.pi * fixit(DATA[2:,17]) / 180 # elevator input [rad]
 
 u_val = fixit(DATA[2:,41]) - fixit(DATA[2:,42]) # speed deviation experimental [m/s]
-alpha_val = fixit(DATA[2:,0]) # - (180 * alpha0 / np.pi) # AoA experimental [deg]
-theta_val = fixit(DATA[2:,22]) # - (180 * th0 / np.pi) # th experimental [deg]
+alpha_val = fixit(DATA[2:,0])  - (180 * alpha0 / np.pi) # AoA experimental [deg]
+theta_val = fixit(DATA[2:,22])  - (180 * th0 / np.pi) # th experimental [deg]
 q_val = fixit(DATA[2:,27]) # q experimental [deg/s]
 
 

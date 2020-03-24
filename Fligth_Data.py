@@ -98,3 +98,5 @@ DATA = DATA.T
     46='Status of graph'
     47='Active Screen'
     48='Time stamp' """
+
+# print("sec",DATA[2:,48][26990:27400])

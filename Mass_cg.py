@@ -19,7 +19,7 @@ CG = [cg_loc_crew, cg_loc_bag,cg_loc_bem,cg_new]
 
 # constants
 BEM = 9165  # lbs
-block_f = 4050   # #lbs2676
+block_f = 2676   # #lbs2676
 Bag = 220   # lbs
 c = [BEM,block_f,Bag]
 
@@ -94,7 +94,7 @@ def cg_funct(c, mass, time, fuel_used,CG,DATA):
 
     return cg_loc_noch[-3:]-cg_loc_real[-3:]
 
-# print(cg_funct(c,mass,time,fuel_used,CG,DATA))
+#print(cg_funct(c,mass,time,fuel_used,CG,DATA))
 
 
 

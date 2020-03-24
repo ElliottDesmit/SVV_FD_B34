@@ -11,13 +11,13 @@ import matplotlib.pyplot as plt
 pi = np.pi
 #==============================================================================
 
-def num_mod(h , V , m , alpha):
+def num_mod(h , V , m ):
 
     # Stationary flight condition
     #------------------------------------------------------------------------------
     hp0    =  h #2743.2          # pressure altitude in the stationary flight condition [m]
     V0     = V  #127.3823        # true airspeed in the stationary flight condition [m/sec]
-    alpha0 = alpha / 180 * pi  # 1.4 angle of attack in the stationary flight condition [rad]
+    alpha0 = 1.4 / 180 * pi  # 1.4 angle of attack in the stationary flight condition [rad]
     th0    = alpha0          # pitch angle in the stationary flight condition [rad]
     #==============================================================================
 
@@ -101,38 +101,38 @@ def num_mod(h , V , m , alpha):
     CXa    = +0.47966		# Positive! (has been erroneously negative since 1993)
     CXadot = +0.08330
     CXq    = -0.28170
-    CXde   = -0.03728
+    CXde   = -0.03728       #-0.03728
 
     CZ0    = -W * np.cos(th0) / (0.5 * rho * V0 ** 2 * S)
     CZu    = -0.37616
-    CZa    = -5.74340
+    CZa    = -2.74340       #-5.74340
     CZadot = -0.00350
-    CZq    = -5.66290
-    CZde   = -0.69612
+    CZq    = -5.66290       #-5.66290
+    CZde   = -0.69612       #-0.69612
 
     Cmu    = +0.06990
     Cmadot = +0.17800
-    Cmq    = -8.79415
+    Cmq    = -8.79415       #-8.79415
 
-    CYb    = -0.7500
+    CYb    = -0.7500    *       1           #-0.7500
     CYbdot =  0
-    CYp    = -0.0304
-    CYr    = +0.8495
-    CYda   = +0.0400        #-0.0400
-    CYdr   = -0.2300        #+0.2300
+    CYp    = -0.0304    *       1           #-0.0304
+    CYr    = +0.8495    *       1           #+0.8495
+    CYda   = -0.0400    *       1           #-0.0400
+    CYdr   = 0.2300     *       1           #+0.2300
 
-    Clb    = -0.10260        #-
-    Clp    = -0.71085        #-0.71085
-    Clr    = +0.23760
-    Clda   = +0.23088       #-0.23088
-    Cldr   = -0.03440       #+0.03440
+    Clb    = -0.10260   *       1           #-0.10260  ##
+    Clp    = -0.71085   *       1.           #-0.71085
+    Clr    = 0.23760    *      -0.5           #0.23760    ##
+    Clda   = -0.23088   *      -1           #-0.23088
+    Cldr   = 0.03440    *      -1           #+0.03440
 
-    Cnb    =  +0.1348
+    Cnb    =  +0.2348   *       1           #+0.1348   ##
     Cnbdot =   0
-    Cnp    =  -0.0602
-    Cnr    =  -0.2061
-    Cnda   =  +0.0120       #-0.0120
-    Cndr   =  +0.0939       #-0.0939
+    Cnp    =  -0.0602   *       1
+    Cnr    =  -0.2061   *       1           #-0.2061  ##
+    Cnda   =  -0.0120   *       1           #-0.0120
+    Cndr   =  -0.0939   *       1           #-0.0939
     #==============================================================================
 
     # State-space matrices
