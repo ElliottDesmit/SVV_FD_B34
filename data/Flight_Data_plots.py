@@ -44,7 +44,7 @@ dom = arange(int(i_0[0])+2,int(i_end[0])+3,1) # create desired domain
 exact_domain = where(DATA[dom,46] != '0.0')
 indexes = dom[exact_domain]
 
-if motion[3] == 'A':
+if motion[3] == 'A': #for Asymmetric motions
 
     # create state vector  (always bèta, phi, etc? or make state whichever meas. are chosen?)
     bèta = DATA[indexes,49].astype(float)
