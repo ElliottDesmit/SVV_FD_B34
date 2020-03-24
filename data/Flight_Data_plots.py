@@ -36,7 +36,8 @@ motion = dutch_roll # choose motion
 
 #=======================================================================================
 
-# Derive parameters/eigenvalues
+# DERIVE PARAMETERS/EIGENVALUES FROM DATA
+
 
 
 
