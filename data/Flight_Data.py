@@ -9,8 +9,8 @@ from numpy import *
 # CREATE DATA ARRAY
 
 
-V = genfromtxt('data.txt',skip_header=2,delimiter=',',dtype=float,comments='$')
-D = genfromtxt('data.txt', skip_header=0, max_rows=1,delimiter=',',dtype=str,comments='$')
+V = genfromtxt('data_ref.txt',skip_header=2,delimiter=',',dtype=float,comments='$')
+D = genfromtxt('data_ref.txt', skip_header=0, max_rows=1,delimiter=',',dtype=str,comments='$')
 #U = genfromtxt('data.txt', skip_header=1, max_rows=1,delimiter=',',dtype=str,comments='$')
 
 
@@ -25,7 +25,8 @@ conv_fac = array([1,1,1,\
                   1,1,\
                   0.0068948,\
                   0.0068948,\
-                  1,1,1,1,1,\
+                  #1,
+                  1,1,1,1,\
                   0.45359,\
                   0.45359,\
                   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,\
@@ -39,7 +40,8 @@ conv_fac = array([1,1,1,\
 
 C = V*conv_fac
 
-SIU = array(['deg','deg','N','kg/s','kg/s','°C','°C','N/mm²','N/mm²','deg','%','%','%','%','kg','kg',\
+SIU = array(['deg','deg','N','kg/s','kg/s','°C','°C','N/mm²','N/mm²',#'deg',\
+             '%','%','%','%','kg','kg',\
              'deg','deg','deg','DD:MM:YY','sec','deg','deg','/','deg','deg','deg/s','deg/s','deg/s',\
              'g', 'g', 'g', 'g', 'g', 'g','°C','°C','m','m','/','Mach','m/s','m/s','m/s','/','/','/','/','sec'])
 
