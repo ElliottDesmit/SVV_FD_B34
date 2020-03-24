@@ -6,19 +6,19 @@
 #------------------------------------------------------------------------------
 import numpy as np
 import control as crtl
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 pi = np.pi
 #==============================================================================
 
-def num_mod(h , V , m ):
+def num_mod(h , V , m):
 
     # Stationary flight condition
     #------------------------------------------------------------------------------
-    hp0    =  h #2743.2          # pressure altitude in the stationary flight condition [m]
-    V0     = V  #127.3823        # true airspeed in the stationary flight condition [m/sec]
+    hp0    =  h #2743.2        # pressure altitude in the stationary flight condition [m]
+    V0     = V  #127.3823      # true airspeed in the stationary flight condition [m/sec]
     alpha0 = 1.4 / 180 * pi  # 1.4 angle of attack in the stationary flight condition [rad]
-    th0    = alpha0          # pitch angle in the stationary flight condition [rad]
+    th0    = alpha0            # pitch angle in the stationary flight condition [rad]
     #==============================================================================
 
     # Aircraft mass
@@ -42,17 +42,17 @@ def num_mod(h , V , m ):
     # Aircraft geometry
     #------------------------------------------------------------------------------
     S      = 30.00	         # wing area [m^2]
-    Sh     = 0.2 * S         # stabiliser area [m^2]
-    Sh_S   = Sh / S	         # [ ]
-    lh     = 0.71 * 5.968    # tail length [m]
+    #Sh     = 0.2 * S         # stabiliser area [m^2]
+    #Sh_S   = Sh / S	         # [ ]
+    #lh     = 0.71 * 5.968    # tail length [m]
     c      = 2.0569	         # mean aerodynamic cord [m]
-    lh_c   = lh / c	         # [ ]
+    #lh_c   = lh / c	         # [ ]
     b      = 15.911	         # wing span [m]
-    bh     = 5.791	         # stabilser span [m]
+    #bh     = 5.791	         # stabilser span [m]
     A      = b ** 2 / S      # wing aspect ratio [ ]
-    Ah     = bh ** 2 / Sh    # stabilser aspect ratio [ ]
-    Vh_V   = 1	             # [ ]
-    ih     = -2 * pi / 180   # stabiliser angle of incidence [rad]
+    #Ah     = bh ** 2 / Sh    # stabilser aspect ratio [ ]
+    #Vh_V   = 1	             # [ ]
+    #ih     = -2 * pi / 180   # stabiliser angle of incidence [rad]
     #==============================================================================
 
     # Constant values concerning atmosphere and gravity
@@ -82,57 +82,57 @@ def num_mod(h , V , m ):
 
     # Aerodynamic constants
     #------------------------------------------------------------------------------
-    Cmac   = 0                      # Moment coefficient about the aerodynamic centre [ ]
-    CNwa   = CLa                    # Wing normal force slope [ ]
-    CNha   = 2 * pi * Ah / (Ah + 2) # Stabiliser normal force slope [ ]
-    depsda = 4 / (A + 2)            # Downwash gradient [ ]
+    #Cmac   = 0                      # Moment coefficient about the aerodynamic centre [ ]
+    #CNwa   = CLa                    # Wing normal force slope [ ]
+    #CNha   = 2 * pi * Ah / (Ah + 2) # Stabiliser normal force slope [ ]
+    #depsda = 4 / (A + 2)            # Downwash gradient [ ]
     #==============================================================================
 
     # Lift and drag coefficient
     #------------------------------------------------------------------------------
-    CL = 2 * W / (rho * V0 ** 2 * S)              # Lift coefficient [ ]
+    CL = 2 * W / (rho * V0 ** 2 * S)               # Lift coefficient [ ]
     CD = CD0 + (CLa * alpha0) ** 2 / (pi * A * e) # Drag coefficient [ ]
     #==============================================================================
 
     # Stabiblity derivatives
     #------------------------------------------------------------------------------
     CX0    = W * np.sin(th0) / (0.5 * rho * V0 ** 2 * S)
-    CXu    = -0.095
-    CXa    = +0.47966		# Positive! (has been erroneously negative since 1993)
-    CXadot = +0.08330
-    CXq    = -0.28170
-    CXde   = -0.03728       #-0.03728
+    CXu    = -0.095   *(1)
+    CXa    = +0.47966 *(1) # Positive! (has been erroneously negative since 1993)
+    #CXadot = +0.08330
+    CXq    = -0.28170 
+    CXde   = -0.03728 
 
     CZ0    = -W * np.cos(th0) / (0.5 * rho * V0 ** 2 * S)
-    CZu    = -0.37616
-    CZa    = -2.74340       #-5.74340
-    CZadot = -0.00350
-    CZq    = -5.66290       #-5.66290
-    CZde   = -0.69612       #-0.69612
+    CZu    = -0.37616 *(2) 
+    CZa    = -5.74340      
+    CZadot = -0.00350 
+    CZq    = -5.66290 *(1.85) 
+    CZde   = -0.69612 *(2.5)
 
-    Cmu    = +0.06990
-    Cmadot = +0.17800
-    Cmq    = -8.79415       #-8.79415
+    Cmu    = +0.06990 
+    Cmadot = +0.17800 
+    Cmq    = -8.79415 *(1.5)
 
-    CYb    = -0.7500    *       1           #-0.7500
+    CYb    = -0.7500 *(0.5) 
     CYbdot =  0
-    CYp    = -0.0304    *       1           #-0.0304
-    CYr    = +0.8495    *       1           #+0.8495
-    CYda   = -0.0400    *       1           #-0.0400
-    CYdr   = 0.2300     *       1           #+0.2300
+    CYp    = -0.0304
+    CYr    = +0.8495
+    CYda   = -0.0400        #-0.0400
+    CYdr   = +0.2300        #+0.2300
 
-    Clb    = -0.10260   *       1           #-0.10260  ##
-    Clp    = -0.71085   *       1.           #-0.71085
-    Clr    = 0.23760    *      -0.5           #0.23760    ##
-    Clda   = -0.23088   *      -1           #-0.23088
-    Cldr   = 0.03440    *      -1           #+0.03440
+    Clb    = -0.10260       #-
+    Clp    = -0.71085 *(1.5)  #-0.71085
+    Clr    = +0.23760 *(-0.1)
+    Clda   = -0.23088 *(-1)  #-0.23088
+    Cldr   = +0.03440 *(-1)  #+0.03440
 
-    Cnb    =  +0.2348   *       1           #+0.1348   ##
-    Cnbdot =   0
-    Cnp    =  -0.0602   *       1
-    Cnr    =  -0.2061   *       1           #-0.2061  ##
-    Cnda   =  -0.0120   *       1           #-0.0120
-    Cndr   =  -0.0939   *       1           #-0.0939
+    Cnb    = +0.1348 *(1)
+    Cnbdot =  0      
+    Cnp    = -0.0602 *(1.5)
+    Cnr    = -0.2061 *(0.8)
+    Cnda   = -0.0120 *(-1)      #-0.0120
+    Cndr   = -0.0939 *(-1)      #-0.0939
     #==============================================================================
 
     # State-space matrices
@@ -282,5 +282,5 @@ def num_mod(h , V , m ):
     #plt.legend(), plt.plot()
     #==============================================================================
 
-    return sys_s , sys_a , np.linalg.eigvals(As) , np.linalg.eigvals(Aa)
+    return sys_s, sys_a, (c/V0)*l1s, (c/V0)*l2s, (c/V0)*l3s, (c/V0)*l4s, (b/V0)*l1a, (b/V0)*l2a, (b/V0)*l3a, (b/V0)*l4a
 

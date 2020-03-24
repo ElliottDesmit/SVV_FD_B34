@@ -6,11 +6,9 @@ Created on Mon Mar 23 12:43:14 2020
 """
 
 # imports
-from Fligth_Data import DATA
-import control as ctrl
+from Flight_Data import DATA
 import numpy as np
 from Mass_cg import M_t_DATA
-import matplotlib.pyplot as plt
 
 alpha0 = 1.4 / 180 * np.pi
 th0 = alpha0
