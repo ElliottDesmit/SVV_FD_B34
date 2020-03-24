@@ -46,8 +46,20 @@ exact_domain = where(DATA[dom,46] != '0.0')
 indexes = dom[exact_domain]
 
 if motion[3] == 'A':
-   
 
+    bèta = arctan(DATA[indexes,33].astype(float)/DATA[indexes,32].astype(float))
+    phi = DATA[indexes,21].astype(float)
+    p = DATA[indexes,26].astype(float)
+    r = DATA[indexes,28].astype(float)
+
+    
+
+    d_e = DATA[indexes,16].astype(float)
+    d_r = DATA[indexes,18].astype(float)
+
+    A = dot(-1*mat([d_e,d_r]).T,linalg.inv(mat([bèta,phi,p,r]).T))
+        
+dom = indexes
 
 #=======================================================================================
 
