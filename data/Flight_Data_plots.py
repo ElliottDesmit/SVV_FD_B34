@@ -11,8 +11,8 @@ x_ax = 48
 # choose desired measurements (see below)
 
 # subplot 1
-y_ax = 21
-y_ax2 = 30
+y_ax = 16
+y_ax2 = 26
 
 #subplot 2
 y_ax3 = 18
@@ -30,13 +30,11 @@ full = [9,4564,'full flight','']
 
 custom = [2650,3600,'custom timeframe',''] 
 
-#eigen_mot = where(DATA[2:,46] != '0.0')
-
-motion = dutch_roll # choose motion
+motion = zero_g # choose motion
 
 #=======================================================================================
 
-# DERIVE PARAMETERS/EIGENVALUES FROM DATA
+# DERIVE EIGENVALUES FROM DATA
 
 i_0 = where(DATA[2:,48].astype(float) == motion[0])
 i_end = where(DATA[2:,48].astype(float) == motion[1])
@@ -47,17 +45,14 @@ indexes = dom[exact_domain]
 
 if motion[3] == 'A':
 
-    bèta = arctan(DATA[indexes,33].astype(float)/DATA[indexes,32].astype(float))
+    bèta = DATA[indexes,49].astype(float)
     phi = DATA[indexes,21].astype(float)
     p = DATA[indexes,26].astype(float)
     r = DATA[indexes,28].astype(float)
 
-    
-
     d_e = DATA[indexes,16].astype(float)
     d_r = DATA[indexes,18].astype(float)
-
-    A = dot(-1*mat([d_e,d_r]).T,linalg.inv(mat([bèta,phi,p,r]).T))
+    #A = dot(-1*mat([d_e,d_r]).T,linalg.inv(mat([bèta,phi,p,r]).T))
         
 dom = indexes
 
@@ -153,4 +148,5 @@ plt.show()
     45='Number of Measurements Ready'
     46='Status of graph'
     47='Active Screen'
-    48='Time' """
+    48='Time'
+    49 = sideslip angle  (calculated arctan('33'/'32') ) """
