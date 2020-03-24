@@ -31,7 +31,7 @@ full = [9,4564,'full flight','']
 
 custom = [2650,3600,'custom timeframe',''] 
 
-motion = dutch_roll # choose motion
+motion = aper_roll# choose motion
 
 #=======================================================================================
 
@@ -64,9 +64,9 @@ if motion[3] == 'A':
         x_dot = vstack((x_dot,xdot))
     x_dot = x_dot.T    
     
-    Ax = mat(x_dot)-mat(Ba)*mat(u)
-    A = Ax/mat(x)
-    
+    #A = (mat(x_dot)-mat(Ba)*mat(u))*linalg.inv(mat(x)) # since: xdot = Ax + Bu
+    # allowed to use 'Ba' from num. mod.?
+
 dom = indexes
 
 #=======================================================================================
