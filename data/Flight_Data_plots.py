@@ -2,14 +2,17 @@ from numpy import *
 from Flight_Data import DATA
 from matplotlib import pyplot as plt
 
+#=======================================================================================
 
 # USER INPUT
+
 x_ax = 48
 
-y_ax = 37 # choose desired measurements
-y_ax2 = 46
-y_ax3 = 17
-y_ax4 = 27
+# choose desired measurements (see below)
+y_ax = 18
+y_ax2 = 28
+y_ax3 = 16
+y_ax4 = 26
 
 
 aper_roll = [2695,2775,'Aperiodic Roll','A'] 
@@ -21,11 +24,16 @@ spiral = [3250,3350,'Spiral','A']
 zero_g = [3500,3550,'Zero G']
 full = [9,4564,'full flight']
 
-custom = [2650,3600,'custom timeframe']
+custom = [2650,3600,'custom timeframe'] 
 
-eigen_mot = where(DATA[2:,46] != '0.0')
+#eigen_mot = where(DATA[2:,46] != '0.0')
 
 motion = custom # choose motion
+
+#=======================================================================================
+
+# Derive parameters/eigenvalues
+
 
 
 #=======================================================================================
