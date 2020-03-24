@@ -30,7 +30,7 @@ full = [9,4564,'full flight','']
 
 custom = [2650,3600,'custom timeframe',''] 
 
-motion = zero_g # choose motion
+motion = dutch_roll # choose motion
 
 #=======================================================================================
 
@@ -49,10 +49,18 @@ if motion[3] == 'A':
     phi = DATA[indexes,21].astype(float)
     p = DATA[indexes,26].astype(float)
     r = DATA[indexes,28].astype(float)
+    x = array([bèta,phi,p,r])
 
     d_e = DATA[indexes,16].astype(float)
     d_r = DATA[indexes,18].astype(float)
-    #A = dot(-1*mat([d_e,d_r]).T,linalg.inv(mat([bèta,phi,p,r]).T))
+    u = array([d_e,d_r])
+
+    x_dot = array([0,0,0,0])
+    for i in range(1,len(indexes-1)):
+        xdot = (x[:,i]-x[:,i-1])/0.1
+        x_dot = vstack((x_dot,xdot))
+    x_dot = x_dot.T    
+    
         
 dom = indexes
 
