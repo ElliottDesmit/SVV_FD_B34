@@ -9,10 +9,14 @@ from matplotlib import pyplot as plt
 x_ax = 48
 
 # choose desired measurements (see below)
-y_ax = 18
-y_ax2 = 28
-y_ax3 = 16
-y_ax4 = 26
+
+# subplot 1
+y_ax = 21
+y_ax2 = 30
+
+#subplot 2
+y_ax3 = 18
+y_ax4 = 28
 
 
 aper_roll = [2695,2775,'Aperiodic Roll','A'] 
@@ -28,7 +32,7 @@ custom = [2650,3600,'custom timeframe']
 
 #eigen_mot = where(DATA[2:,46] != '0.0')
 
-motion = custom # choose motion
+motion = dutch_roll # choose motion
 
 #=======================================================================================
 
