@@ -13,13 +13,13 @@ short_period = [2755,2850,'Short Period Motion','S']
 dutch_roll = [2850,2900,'Dutch Roll','A']
 dutch_roll_yd = [2910,2970, 'Dutch Roll YD','A']
 phugoid = [2970,3180,'Phugoid','S']
-spiral = [3250,3350,'Spiral','A']
+spiral = [3350,3500,'Spiral','A']
 zero_g = [3500,3550,'Zero G','']
 full = [9,4564,'full flight','']
 
-custom = [2650,3600,'custom timeframe',''] # USER INPUT
+custom = [3400,3600,'custom timeframe',''] # USER INPUT
 
-motion = phugoid # choose motion # USER INPUT
+motion = custom # choose motion # USER INPUT
 
 
 i_0 = where(DATA[2:,48].astype(float) == motion[0])
@@ -49,6 +49,15 @@ elif motion[3] == 'S':
     #subplot 2
     y_ax3 = 22
     y_ax4 = 27
+
+else:
+    # subplot 1
+    y_ax = 46
+    y_ax2 = 21
+
+    #subplot 2
+    y_ax3 = 26
+    y_ax4 = 28
 
 
 #=====================================================================================
