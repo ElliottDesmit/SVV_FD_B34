@@ -17,7 +17,7 @@ spiral = [3250,3350,'Spiral','A']
 zero_g = [3500,3550,'Zero G','']
 full = [9,4564,'full flight','']
 
-custom = [2650,3600,'custom timeframe',''] 
+custom = [2650,3600,'custom timeframe',''] # USER INPUT
 
 motion = phugoid # choose motion # USER INPUT
 
@@ -49,15 +49,20 @@ elif motion[3] == 'S':
     #subplot 2
     y_ax3 = 22
     y_ax4 = 27
-    
-#create state vector  (always bèta, phi, etc? or make state whichever meas. are chosen?)
-bèta = DATA[indexes,49].astype(float)
-phi = DATA[indexes,21].astype(float)
-p = DATA[indexes,26].astype(float)
-r = DATA[indexes,28].astype(float)
-x = array([bèta,phi,p,r])
 
-a0_phi = max(abs(max(phi)),abs(min(phi)))
+
+#=====================================================================================
+
+# EIGENVALUES
+
+###create state vector  (always bèta, phi, etc? or make state whichever meas. are chosen?)
+##bèta = DATA[indexes,49].astype(float)
+##phi = DATA[indexes,21].astype(float)
+##p = DATA[indexes,26].astype(float)
+##r = DATA[indexes,28].astype(float)
+##x = array([bèta,phi,p,r])
+##
+##a0_phi = max(abs(max(phi)),abs(min(phi)))
 
 
 
