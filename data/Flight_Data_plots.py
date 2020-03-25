@@ -45,7 +45,7 @@ elif motion[3] == 'S':
     # subplot 1
     y_ax = 42
     y_ax2 = 0
-
+    
     #subplot 2
     y_ax3 = 22
     y_ax4 = 27
