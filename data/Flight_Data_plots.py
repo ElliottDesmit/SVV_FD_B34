@@ -50,7 +50,7 @@ elif motion[3] == 'S':
     y_ax3 = 22
     y_ax4 = 27
 
-else:
+else: # customize, user input
     # subplot 1
     y_ax = 46
     y_ax2 = 21
