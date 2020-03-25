@@ -5,20 +5,8 @@ from Num_Mod import Ba
 
 #=======================================================================================
 
-# USER INPUT
 
-x_ax = 48
-
-# choose desired measurements (see below)
-
-# subplot 1
-y_ax = 16
-y_ax2 = 26
-
-#subplot 2
-y_ax3 = 18
-y_ax4 = 28
-
+x_ax = 48 # time
 
 aper_roll = [2695,2775,'Aperiodic Roll','A'] 
 short_period = [2755,2850,'Short Period Motion','S']
@@ -31,48 +19,77 @@ full = [9,4564,'full flight','']
 
 custom = [2650,3600,'custom timeframe',''] 
 
-motion = dutch_roll# choose motion
+motion = phugoid # choose motion # USER INPUT
 
-#=======================================================================================
-
-# DERIVE EIGENVALUES FROM DATA
 
 i_0 = where(DATA[2:,48].astype(float) == motion[0])
 i_end = where(DATA[2:,48].astype(float) == motion[1])
 dom = arange(int(i_0[0])+2,int(i_end[0])+3,1) # create desired domain
 
-exact_domain = where(DATA[dom,46] != '0.0')
+exact_domain = where(DATA[dom,46] == '2.0')
 indexes = dom[exact_domain]
 
-if motion[3] == 'A': #for Asymmetric motions
 
-    # create state vector  (always bèta, phi, etc? or make state whichever meas. are chosen?)
-    bèta = DATA[indexes,49].astype(float)
-    phi = DATA[indexes,21].astype(float)
-    p = DATA[indexes,26].astype(float)
-    r = DATA[indexes,28].astype(float)
-    x = mat([bèta,phi,p,r])
+# choose desired measurements (see below)
 
-    # input vector (for assymetrical motion)
-    d_e = DATA[indexes,16].astype(float)
-    d_r = DATA[indexes,18].astype(float)
-    u = mat([d_e,d_r])
+if motion[3] == 'A':
+    # subplot 1
+    y_ax = 49
+    y_ax2 = 21
 
-    x_dot = array([[0],[0],[0],[0]])
-    for i in range(1,len(indexes-1)):
-        xdot = (x[:,i]-x[:,i-1])/0.1
-        x_dot = hstack((x_dot,xdot))
-    x_dot = mat(x_dot)
-    # or is xdot depending on the meas. chosen? eg: choose x = [roll angle, pitch angle],
-    # so xdot = [roll rate, pitch rate]? but then see comment on state vector again
+    #subplot 2
+    y_ax3 = 26
+    y_ax4 = 28
+
+elif motion[3] == 'S':
+    # subplot 1
+    y_ax = 42
+    y_ax2 = 0
+
+    #subplot 2
+    y_ax3 = 22
+    y_ax4 = 27
     
-    A = dot((x_dot-mat(Ba)*u),1/x.T) # since: xdot = Ax + Bu
-    # allowed to use 'Ba' from num. mod.? Since the B matr only contains given A/C parameters, right?
-    # trying to do this: (xdot - B*u)/x = A, so to divide I do dotproduct with 1/(x.transposed)?
-    # only this way I can get A to be square
-    # waarom schrijf ik dit in het engels
+#create state vector  (always bèta, phi, etc? or make state whichever meas. are chosen?)
+bèta = DATA[indexes,49].astype(float)
+phi = DATA[indexes,21].astype(float)
+p = DATA[indexes,26].astype(float)
+r = DATA[indexes,28].astype(float)
+x = array([bèta,phi,p,r])
 
-    eigen_val = linalg.eigvals(A)
+a0_phi = max(abs(max(phi)),abs(min(phi)))
+
+
+
+##if motion[3] == 'A': #for Asymmetric motions
+##
+##    # create state vector  (always bèta, phi, etc? or make state whichever meas. are chosen?)
+##    bèta = DATA[indexes,49].astype(float)
+##    phi = DATA[indexes,21].astype(float)
+##    p = DATA[indexes,26].astype(float)
+##    r = DATA[indexes,28].astype(float)
+##    x = mat([bèta,phi,p,r])
+##
+##    # input vector (for assymetrical motion)
+##    d_e = DATA[indexes,16].astype(float)
+##    d_r = DATA[indexes,18].astype(float)
+##    u = mat([d_e,d_r])
+##
+##    x_dot = array([[0],[0],[0],[0]])
+##    for i in range(1,len(indexes-1)):
+##        xdot = (x[:,i]-x[:,i-1])/0.1
+##        x_dot = hstack((x_dot,xdot))
+##    x_dot = mat(x_dot)
+##    # or is xdot depending on the meas. chosen? eg: choose x = [roll angle, pitch angle],
+##    # so xdot = [roll rate, pitch rate]? but then see comment on state vector again
+##    
+##    A = divide((x_dot-mat(Ba)*u),x) # since: xdot = Ax + Bu
+##    # allowed to use 'Ba' from num. mod.? Since the B matr only contains given A/C parameters, right?
+##    # trying to do this: (xdot - B*u)/x = A, so to divide I do dotproduct with 1/(x.transposed)?
+##    # only this way I can get A to be square
+##    # waarom schrijf ik dit in het engels
+##
+##    eigen_val = linalg.eigvals(A)
 
 dom = indexes
 
