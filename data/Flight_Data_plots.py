@@ -64,8 +64,10 @@ if motion[3] == 'A': #for Asymmetric motions
         x_dot = vstack((x_dot,xdot))
     x_dot = x_dot.T    
     
-    #A = (mat(x_dot)-mat(Ba)*mat(u))*linalg.inv(mat(x)) # since: xdot = Ax + Bu
+    A = dot((mat(x_dot)-mat(Ba)*mat(u)),1/x.T) # since: xdot = Ax + Bu
     # allowed to use 'Ba' from num. mod.?
+
+    eigen_val, eigen_vec = linalg.eig(A)
 
 dom = indexes
 
