@@ -62,10 +62,12 @@ if motion[3] == 'A': #for Asymmetric motions
     for i in range(1,len(indexes-1)):
         xdot = (x[:,i]-x[:,i-1])/0.1
         x_dot = vstack((x_dot,xdot))
-    x_dot = x_dot.T    
+    x_dot = x_dot.T
+    # or is xdot depending on the meas. chosen? eg: choose x = [roll angle, pitch angle],
+    # so xdot = [roll rate, pitch rate]?
     
-    A = dot((mat(x_dot)-mat(Ba)*mat(u)),1/x.T) # since: xdot = Ax + Bu
-    # allowed to use 'Ba' from num. mod.?
+    A = dot((mat(x_dot)-mat(Ba)*mat(u)),1/mat(x).T) # since: xdot = Ax + Bu
+    # allowed to use 'Ba' from num. mod.? Since the B matr only contains given A/C parameters, right?
     # trying to do this: (xdot - B*u)/x = A, so to divide I do dotproduct with 1/(x.transposed)?
     # only this way I can get A to be square
     # waarom schrijf ik dit in het engels
