@@ -66,8 +66,11 @@ if motion[3] == 'A': #for Asymmetric motions
     
     A = dot((mat(x_dot)-mat(Ba)*mat(u)),1/x.T) # since: xdot = Ax + Bu
     # allowed to use 'Ba' from num. mod.?
+    # trying to do this: (xdot - B*u)/x = A, so to divide I do dotproduct with 1/(x.transposed)?
+    # only this way I can get A to be square
+    # waarom schrijf ik dit in het engels
 
-    eigen_val, eigen_vec = linalg.eig(A)
+    eigen_val = linalg.eigvals(A)
 
 dom = indexes
 
