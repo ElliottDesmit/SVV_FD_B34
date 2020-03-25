@@ -48,7 +48,7 @@ DATA = hstack((DATA.T,C.T))
 #DATA = DATA.T
 
 Bèta = arctan(C[:,33]/C[:,32])
-Bèta = append(['Sideslip Angle','deg'],Bèta)
+Bèta = append(['Sideslip Angle','rad'],Bèta)
 
 DATA = vstack((DATA,Bèta))
 DATA = DATA.T
