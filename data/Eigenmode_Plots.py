@@ -205,8 +205,8 @@ t_spiral = np.arange(3400,3470,0.1)
 # Start Eigenvalues Calculation Here
 #===================================
 
-motion = t_spiral
-value = phi_val
+motion = t_shortperiod
+value = q_val
 
 # create desired domain
 i_0 = np.where(t == motion[0])
@@ -222,7 +222,7 @@ c_mac = 2.0569
 
 value = value[dom]
 # identefy local maxima
-peaks = np.where(abs(np.hstack((0,value))[:-1]-value) < 0.1) #find indexes of local maxima
+peaks = np.where(abs(np.hstack((0,value))[:-1]-value) < 0.05) #find indexes of local maxima
 av = np.average(value[peaks])
 peaks = peaks[0][np.where(value[peaks] > av)]
 # create dataset of local maxima
@@ -249,7 +249,7 @@ eig_c = 2*np.pi*c_mac/(V*P)
 
 
 
-print('T1/2: ',T_half,'\nP: ',P,'\nEigenvalue: ',eig_r[0],' + ',eig_c[0],'j')
+print('T1/2: ',T_half,'\nP: ',P,'\nEigenvalue: ',round(eig_r[0],7),' + ',round(eig_c[0],7),'j')
 
 plt.plot(t[dom],y)
 plt.plot(t[dom],value)
