@@ -31,7 +31,7 @@ full = [9,4564,'full flight','']
 
 custom = [2650,3600,'custom timeframe',''] 
 
-motion = aper_roll# choose motion
+motion = dutch_roll# choose motion
 
 #=======================================================================================
 
@@ -51,22 +51,22 @@ if motion[3] == 'A': #for Asymmetric motions
     phi = DATA[indexes,21].astype(float)
     p = DATA[indexes,26].astype(float)
     r = DATA[indexes,28].astype(float)
-    x = array([bèta,phi,p,r])
+    x = mat([bèta,phi,p,r])
 
     # input vector (for assymetrical motion)
     d_e = DATA[indexes,16].astype(float)
     d_r = DATA[indexes,18].astype(float)
-    u = array([d_e,d_r])
+    u = mat([d_e,d_r])
 
-    x_dot = array([0,0,0,0])
+    x_dot = array([[0],[0],[0],[0]])
     for i in range(1,len(indexes-1)):
         xdot = (x[:,i]-x[:,i-1])/0.1
-        x_dot = vstack((x_dot,xdot))
-    x_dot = x_dot.T
+        x_dot = hstack((x_dot,xdot))
+    x_dot = mat(x_dot)
     # or is xdot depending on the meas. chosen? eg: choose x = [roll angle, pitch angle],
-    # so xdot = [roll rate, pitch rate]?
+    # so xdot = [roll rate, pitch rate]? but then see comment on state vector again
     
-    A = dot((mat(x_dot)-mat(Ba)*mat(u)),1/mat(x).T) # since: xdot = Ax + Bu
+    A = dot((x_dot-mat(Ba)*u),1/x.T) # since: xdot = Ax + Bu
     # allowed to use 'Ba' from num. mod.? Since the B matr only contains given A/C parameters, right?
     # trying to do this: (xdot - B*u)/x = A, so to divide I do dotproduct with 1/(x.transposed)?
     # only this way I can get A to be square
