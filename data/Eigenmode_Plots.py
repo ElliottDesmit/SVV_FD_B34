@@ -121,7 +121,7 @@ t_spiral = np.arange(3400,3470,0.1)
 ###Asymmetric
 ###==========
 ##
-###1 Aperiodic
+#1 Aperiodic
 ##b , e = list(t).index(2711) , list(t).index(2750)
 ##
 ##plt.subplot(221)
@@ -145,8 +145,8 @@ t_spiral = np.arange(3400,3470,0.1)
 ##plt.xlabel("Flight Time [s]", fontsize="15")
 ##plt.ylabel("Anglular Speed [deg/s]", fontsize="15")
 ##plt.legend()
-##
-###plt.show()
+
+#plt.show()
 ##
 ###2 dutch
 ##b , e = list(t).index(2850),list(t).index(2880)
@@ -205,8 +205,8 @@ t_spiral = np.arange(3400,3470,0.1)
 # Start Eigenvalues Calculation Here
 #===================================
 
-motion = t_shortperiod
-value = q_val
+motion = t_dutch
+value = r_val
 
 # create desired domain
 i_0 = np.where(t == motion[0])
@@ -222,7 +222,7 @@ c_mac = 2.0569
 
 value = value[dom]
 # identefy local maxima
-peaks = np.where(abs(np.hstack((0,value))[:-1]-value) < 0.05) #find indexes of local maxima
+peaks = np.where(abs(np.hstack((0,value))[:-1]-value) < 0.1) #find indexes of local maxima
 av = np.average(value[peaks])
 peaks = peaks[0][np.where(value[peaks] > av)]
 # create dataset of local maxima
@@ -247,14 +247,21 @@ P = 2*(abs(motion[i_min]-motion[i_max]))
 eig_r = np.log(0.5)*c_mac/(V*T_half)
 eig_c = 2*np.pi*c_mac/(V*P)
 
+numc = 0.0
+numr = -0.00204188
 
+error_r = (abs(eig_r[0]-numr)/max(abs(eig_r[0]),abs(numr)))
+error_c = (abs(eig_c[0]-numc)/max(abs(eig_c[0]),abs(numc)))
 
-print('T1/2: ',T_half,'\nP: ',P,'\nEigenvalue: ',round(eig_r[0],7),' + ',round(eig_c[0],7),'j')
+print('T1/2: ',T_half,'\nP: ',P,'\nEigenvalue: ',round(eig_r[0],7),' + ',round(eig_c[0],7),'j',
+      '\nReal error: ',error_r*100,'\nIm error: ',error_c*100)
 
-plt.plot(t[dom],y)
-plt.plot(t[dom],value)
-plt.plot(t[dom],len(value)*[av],'--',color='r')
-plt.plot(t[dom],len(value)*[a_half],'--',color='g')
+plt.plot(t[dom],y,label="Logarithmic 'closest fit'")
+plt.plot(t[dom],value,label='Data',color='black')
+plt.plot(t[dom],len(value)*[av],'--',color='black')
+plt.plot(t[dom[0:int(i_half[0])]],len(t[dom[0:int(i_half[0])]])*[a_half],'--',color='gray',label='a_0/2')
+plt.legend()
+
 plt.show()
 
 
